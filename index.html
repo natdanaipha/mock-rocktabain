@@ -199,86 +199,89 @@
       margin-bottom: 6px;
     }
 
-    /* ===== REALISTIC THAI LICENSE PLATE ===== */
+    /* ===== REALISTIC THAI LICENSE PLATE (ตรงตามของจริง) ===== */
 
-    /* Outer wrapper — drop shadow gives depth */
+    /*
+      Layout จากบนลงล่าง:
+      1. หมวดอักษร  (ออม / กกก / สวย)  ← ตัวกลาง-ใหญ่
+      2. ชื่อจังหวัด (กรุงเทพมหานคร)    ← ตัวเล็กมาก
+      3. ตัวเลข     (444 / 8888)        ← ตัวใหญ่มาก
+      กรอบดำหนา พื้นขาว-ครีม
+    */
+
     .th-plate {
-      display: inline-block;
-      background: #f8f8f0;
-      border: 3.5px solid #111;
-      border-radius: 6px;
-      overflow: hidden;
-      box-shadow: 3px 4px 0 #666, inset 0 0 0 2.5px #e8e8d0;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #f9f9f0;            /* สีครีมอ่อนๆ เหมือนป้ายจริง */
+      border: 5px solid #111;
+      border-radius: 5px;
+      padding: 7px 14px 8px;
+      box-shadow: 3px 4px 0 #444,     /* เงาด้านล่าง-ขวา ให้รู้สึกมีมิติ */
+                  inset 0 0 0 2px #ddddc8; /* ขอบด้านในสีทอง/เขียว */
       font-family: 'Sarabun', sans-serif;
       user-select: none;
       text-align: center;
-      position: relative;
+      gap: 0;
+      min-width: 130px;
     }
 
-    /* Blue banner at top — car */
-    .th-plate--car { width: 196px; }
-    .th-plate--car .th-plate__banner {
-      background: #1a3b8f;
-    }
+    /* รถยนต์ — กว้างกว่า */
+    .th-plate--car  { min-width: 160px; padding: 7px 18px 8px; }
+    /* มอเตอร์ไซด์ — แคบกว่า */
+    .th-plate--moto { min-width: 120px; padding: 6px 12px 7px; }
 
-    /* Red banner at top — motorcycle */
-    .th-plate--moto { width: 138px; }
-    .th-plate--moto .th-plate__banner {
-      background: #c0392b;
-    }
-
-    /* Province banner */
-    .th-plate__banner {
-      color: #fff;
-      font-size: 0.62rem;
-      font-weight: 700;
-      padding: 3px 8px 3px;
-      letter-spacing: 0.8px;
-      text-align: center;
-    }
-
-    /* Horizontal divider line */
-    .th-plate__divider {
-      height: 1.5px;
-      background: #c8c8b0;
-      margin: 0 6px;
-    }
-
-    /* Thai prefix row (หมวดอักษร) */
+    /* ① หมวดอักษร — บน */
     .th-plate__prefix {
-      font-size: 1.05rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: #111;
-      padding: 3px 8px 1px;
-      letter-spacing: 3px;
+      letter-spacing: 4px;
       line-height: 1.15;
+      white-space: nowrap;
     }
     .th-plate--moto .th-plate__prefix {
-      font-size: 0.92rem;
-      letter-spacing: 2px;
+      font-size: 1.15rem;
+      letter-spacing: 3px;
     }
 
-    /* Number row — largest text */
+    /* ② จังหวัด — กลาง เล็กมาก */
+    .th-plate__province {
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: #333;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+      margin: 1px 0 2px;
+      white-space: nowrap;
+    }
+    .th-plate--moto .th-plate__province {
+      font-size: 0.52rem;
+    }
+
+    /* ③ ตัวเลข — ล่าง ใหญ่สุด */
     .th-plate__number {
-      font-size: 2.1rem;
+      font-size: 2.5rem;
       font-weight: 900;
       color: #111;
-      padding: 0 8px 5px;
       letter-spacing: 5px;
-      line-height: 1.1;
+      line-height: 1.0;
+      white-space: nowrap;
     }
     .th-plate--moto .th-plate__number {
-      font-size: 1.75rem;
+      font-size: 2.0rem;
       letter-spacing: 4px;
     }
 
-    /* small SM size variant for inside search-box */
-    .th-plate--sm { width: 160px; }
-    .th-plate--sm .th-plate__prefix { font-size: 0.88rem; letter-spacing: 2px; }
-    .th-plate--sm .th-plate__number { font-size: 1.7rem; letter-spacing: 4px; }
+    /* size variant เล็กลงสำหรับ search-box preview */
+    .th-plate--sm { min-width: 130px; padding: 5px 12px 6px; }
+    .th-plate--sm .th-plate__prefix { font-size: 1.1rem; letter-spacing: 3px; }
+    .th-plate--sm .th-plate__province { font-size: 0.52rem; }
+    .th-plate--sm .th-plate__number  { font-size: 2.0rem; letter-spacing: 4px; }
 
-    /* Keep old names for backward-compat — redirect to new */
-    .plate-thai-car, .plate-thai-moto { display:none; }
+    /* ลบ old class ที่ไม่ใช้แล้ว */
+    .plate-thai-car, .plate-thai-moto { display: none; }
 
     .plate-card-label {
       font-size: 0.78rem; color: var(--gray); font-weight: 500;
@@ -732,9 +735,8 @@
     <div class="plate-preview-row" id="platePreviewRow">
       <div id="mainPlatePreview">
         <div class="th-plate th-plate--car th-plate--sm" id="previewPlate">
-          <div class="th-plate__banner" id="prevProvince">กรุงเทพมหานคร</div>
-          <div class="th-plate__divider"></div>
           <div class="th-plate__prefix" id="prevPrefix">กข</div>
+          <div class="th-plate__province" id="prevProvince">กรุงเทพมหานคร</div>
           <div class="th-plate__number" id="prevNumber">8888</div>
         </div>
       </div>
@@ -841,9 +843,8 @@
           <!-- Booking Plate Live Preview -->
           <div style="display:flex;justify-content:center;margin:10px 0 4px;">
             <div class="th-plate th-plate--car" id="bookingPlatePreview">
-              <div class="th-plate__banner" id="bookPrevProvince">กรุงเทพมหานคร</div>
-              <div class="th-plate__divider"></div>
               <div class="th-plate__prefix" id="bookPrevPrefix">?</div>
+              <div class="th-plate__province" id="bookPrevProvince">เลือกจังหวัด</div>
               <div class="th-plate__number" id="bookPrevNum">????</div>
             </div>
           </div>
@@ -1089,14 +1090,13 @@
     popular: 'ยอดนิยม', lucky: 'เลขมงคล', premium: 'พรีเมียม', new: 'มาใหม่'
   };
 
-  // Build a realistic plate HTML string
+  // Build a realistic plate HTML string — layout: prefix / province / number
   function plateTpl(prefix, num, province, type) {
     const cls = type === 'moto' ? 'th-plate--moto' : 'th-plate--car';
     return `
       <div class="th-plate ${cls}">
-        <div class="th-plate__banner">${province}</div>
-        <div class="th-plate__divider"></div>
         <div class="th-plate__prefix">${prefix}</div>
+        <div class="th-plate__province">${province}</div>
         <div class="th-plate__number">${num}</div>
       </div>`;
   }
@@ -1123,20 +1123,15 @@
     const prefix = document.getElementById('searchPrefix').value || 'กข';
     const num = document.getElementById('searchNum').value || '8888';
 
-    // Update text content
+    // Update text — prevProvince is now th-plate__province (middle row)
+    document.getElementById('prevPrefix').textContent   = prefix;
     document.getElementById('prevProvince').textContent = province;
-    document.getElementById('prevPrefix').textContent = prefix;
-    document.getElementById('prevNumber').textContent = num;
+    document.getElementById('prevNumber').textContent   = num;
 
-    // Swap plate type class
+    // Swap plate type class (no color change — both white now)
     const plate = document.getElementById('previewPlate');
-    if (type === 'moto') {
-      plate.classList.remove('th-plate--car');
-      plate.classList.add('th-plate--moto');
-    } else {
-      plate.classList.remove('th-plate--moto');
-      plate.classList.add('th-plate--car');
-    }
+    plate.classList.toggle('th-plate--moto', type === 'moto');
+    plate.classList.toggle('th-plate--car',  type !== 'moto');
   }
 
   // ===== BOOKING PLATE DISPLAY =====
@@ -1154,13 +1149,10 @@
     document.querySelectorAll('.vehicle-type-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
     document.getElementById('selectedVehicle').value = type;
-    // sync booking plate preview banner color
+    // sync booking plate preview size
     const bp = document.getElementById('bookingPlatePreview');
-    if (type === 'moto') {
-      bp.classList.remove('th-plate--car'); bp.classList.add('th-plate--moto');
-    } else {
-      bp.classList.remove('th-plate--moto'); bp.classList.add('th-plate--car');
-    }
+    bp.classList.toggle('th-plate--moto', type === 'moto');
+    bp.classList.toggle('th-plate--car',  type !== 'moto');
   }
 
   // ===== FILL BOOKING FROM PLATE CARD =====
@@ -1184,11 +1176,8 @@
     // update booking plate preview
     updateBookingPlate();
     const bp = document.getElementById('bookingPlatePreview');
-    if (type === 'moto') {
-      bp.classList.remove('th-plate--car'); bp.classList.add('th-plate--moto');
-    } else {
-      bp.classList.remove('th-plate--moto'); bp.classList.add('th-plate--car');
-    }
+    bp.classList.toggle('th-plate--moto', type === 'moto');
+    bp.classList.toggle('th-plate--car',  type !== 'moto');
     // scroll to form
     document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
     showToast('✅', `เลือกป้าย ${prefix} · ${num} แล้ว! กรอกข้อมูลด้านล่างได้เลย`);
