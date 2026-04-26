@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>จองป้ายทะเบียนรถ | PlateBook Thailand</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: #f4f7fb;
+      color: #1a1a2e;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ===== CSS VARIABLES ===== */
+    :root {
+      --primary: #0047AB;
+      --primary-dark: #003380;
+      --accent: #FFD700;
+      --accent-dark: #e6c200;
+      --red: #e74c3c;
+      --green: #27ae60;
+      --gray-light: #f0f4ff;
+      --gray: #8892a4;
+      --white: #ffffff;
+      --shadow: 0 4px 24px rgba(0,71,171,0.10);
+      --shadow-hover: 0 8px 36px rgba(0,71,171,0.18);
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 7px; }
+    ::-webkit-scrollbar-track { background: #e8edf5; }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      position: sticky; top: 0; z-index: 1000;
+      background: var(--white);
+      box-shadow: 0 2px 16px rgba(0,71,171,0.08);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo {
+      width: 44px; height: 44px;
+      background: var(--primary);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo svg { width: 26px; height: 26px; fill: var(--accent); }
+    .nav-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
+    .nav-title span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .nav-links a {
+      text-decoration: none; color: #555; font-size: 0.95rem; font-weight: 500;
+      padding: 7px 14px; border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+    .nav-links a:hover { background: var(--gray-light); color: var(--primary); }
+    .nav-btn {
+      background: var(--primary) !important; color: var(--white) !important;
+      padding: 8px 20px !important; border-radius: 30px !important;
+      font-weight: 600 !important;
+    }
+    .nav-btn:hover { background: var(--primary-dark) !important; }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(135deg, #0047AB 0%, #003380 50%, #001f66 100%);
+      padding: 70px 5% 90px;
+      position: relative; overflow: hidden;
+      text-align: center;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 400px; height: 400px;
+      background: rgba(255,215,0,0.08);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -100px; left: -60px;
+      width: 300px; height: 300px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,215,0,0.15);
+      border: 1px solid rgba(255,215,0,0.3);
+      color: var(--accent); font-size: 0.85rem; font-weight: 600;
+      padding: 5px 14px; border-radius: 30px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800; color: var(--white);
+      line-height: 1.2; margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      font-size: 1.1rem; color: rgba(255,255,255,0.8);
+      max-width: 560px; margin: 0 auto 36px;
+    }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 40px;
+      flex-wrap: wrap; margin-bottom: 44px;
+    }
+    .hero-stat { text-align: center; color: var(--white); }
+    .hero-stat-num { font-size: 2rem; font-weight: 800; color: var(--accent); }
+    .hero-stat-label { font-size: 0.85rem; opacity: 0.75; }
+
+    /* ===== SEARCH BOX ===== */
+    .search-box {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 32px 36px;
+      max-width: 780px; margin: 0 auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      position: relative; z-index: 2;
+    }
+    .search-box h3 {
+      font-size: 1.1rem; font-weight: 700; color: var(--primary);
+      margin-bottom: 20px; text-align: left;
+    }
+    .search-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 14px; margin-bottom: 14px;
+    }
+    .search-row.three { grid-template-columns: 1fr 1fr 1fr; }
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
+    .field-group label {
+      font-size: 0.82rem; font-weight: 600;
+      color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .field-group select,
+    .field-group input {
+      padding: 11px 14px;
+      border: 1.5px solid #dde4f0;
+      border-radius: var(--radius-sm);
+      font-family: 'Sarabun', sans-serif;
+      font-size: 0.95rem; color: #333;
+      background: #fafbff;
+      transition: all 0.2s; outline: none;
+    }
+    .field-group select:focus,
+    .field-group input:focus {
+      border-color: var(--primary);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(0,71,171,0.08);
+    }
+    .search-btn {
+      width: 100%; margin-top: 6px;
+      background: var(--primary);
+      color: var(--white);
+      border: none; border-radius: 10px;
+      padding: 14px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: all 0.25s;
+      font-family: 'Sarabun', sans-serif;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .search-btn:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: var(--shadow-hover); }
+    .search-btn:active { transform: translateY(0); }
+
+    /* ===== PLATE PREVIEW ===== */
+    .plate-preview-section {
+      max-width: 780px; margin: 0 auto; padding: 0;
+    }
+    .plate-preview-row {
+      display: flex; justify-content: center; gap: 24px;
+      margin-top: 18px; flex-wrap: wrap;
+    }
+    .plate-card {
+      cursor: pointer;
+      border: 2.5px solid transparent;
+      border-radius: var(--radius);
+      padding: 10px 18px;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .plate-card:hover, .plate-card.active {
+      border-color: var(--primary);
+      background: var(--gray-light);
+    }
+    .plate-img {
+      position: relative; display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    /* Thai License Plate Car */
+    .plate-thai-car {
+      background: #fff;
+      border: 3px solid #1a1a1a;
+      border-radius: 6px;
+      padding: 6px 14px 4px;
+      min-width: 180px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .plate-thai-car::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+    .plate-province {
+      font-size: 0.7rem; font-weight: 700;
+      color: var(--primary); text-align: center;
+      margin-top: 6px; letter-spacing: 1px;
+    }
+    .plate-number {
+      font-size: 1.6rem; font-weight: 800;
+      color: #111; letter-spacing: 3px;
+      text-align: center; line-height: 1.1;
+    }
+    .plate-card-label {
+      font-size: 0.78rem; color: var(--gray); font-weight: 500;
+    }
+
+    /* Thai License Plate Moto */
+    .plate-thai-moto {
+      background: #fff;
+      border: 3px solid #1a1a1a;
+      border-radius: 6px;
+      padding: 6px 12px 4px;
+      min-width: 130px;
+      position: relative;
+    }
+    .plate-thai-moto::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 7px;
+      background: var(--red);
+      border-radius: 3px 3px 0 0;
+    }
+    .plate-thai-moto .plate-number { font-size: 1.3rem; }
+
+    /* ===== SECTION ===== */
+    section { padding: 70px 5%; }
+    .section-header { text-align: center; margin-bottom: 50px; }
+    .section-tag {
+      display: inline-block;
+      background: var(--gray-light);
+      color: var(--primary); font-size: 0.8rem; font-weight: 700;
+      padding: 4px 14px; border-radius: 30px;
+      margin-bottom: 10px; letter-spacing: 0.5px;
+    }
+    .section-header h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800; color: #1a1a2e; margin-bottom: 10px;
+    }
+    .section-header p { color: var(--gray); font-size: 1rem; max-width: 500px; margin: 0 auto; }
+
+    /* ===== HOW IT WORKS ===== */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; }
+    .step-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 30px 24px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: all 0.3s;
+      position: relative;
+    }
+    .step-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+    .step-num {
+      width: 48px; height: 48px;
+      background: var(--primary);
+      color: var(--white); font-size: 1.1rem; font-weight: 800;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .step-icon { font-size: 2.4rem; margin-bottom: 12px; }
+    .step-card h4 { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+    .step-card p { font-size: 0.88rem; color: var(--gray); }
+    .step-arrow {
+      display: none;
+    }
+
+    /* ===== FEATURED PLATES ===== */
+    .plates-bg { background: var(--gray-light); }
+    .plates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .plate-item {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .plate-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary); }
+    .plate-item-inner { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .plate-badge {
+      font-size: 0.72rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .badge-popular { background: #fff3e0; color: #e65100; }
+    .badge-lucky { background: #e8f5e9; color: #1b5e20; }
+    .badge-premium { background: #fce4ec; color: #880e4f; }
+    .badge-new { background: #e3f2fd; color: #0d47a1; }
+    .plate-price {
+      font-size: 1rem; font-weight: 700; color: var(--primary);
+    }
+    .plate-price span { font-size: 0.75rem; color: var(--gray); font-weight: 400; }
+    .plate-book-btn {
+      width: 100%; padding: 9px;
+      background: var(--primary); color: var(--white);
+      border: none; border-radius: var(--radius-sm);
+      font-family: 'Sarabun', sans-serif;
+      font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .plate-book-btn:hover { background: var(--primary-dark); }
+
+    /* ===== BOOKING FORM ===== */
+    .booking-section { background: var(--white); }
+    .booking-container {
+      max-width: 700px; margin: 0 auto;
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .booking-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      padding: 28px 36px;
+      color: var(--white);
+    }
+    .booking-header h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; }
+    .booking-header p { font-size: 0.9rem; opacity: 0.8; }
+    .booking-body { padding: 36px; }
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block; margin-bottom: 7px;
+      font-size: 0.88rem; font-weight: 600; color: #444;
+    }
+    .form-label span { color: var(--red); }
+    .form-control {
+      width: 100%; padding: 12px 16px;
+      border: 1.5px solid #dde4f0;
+      border-radius: var(--radius-sm);
+      font-family: 'Sarabun', sans-serif;
+      font-size: 0.95rem; color: #333;
+      background: #fafbff;
+      transition: all 0.2s; outline: none;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0,71,171,0.08);
+      background: var(--white);
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .vehicle-type-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .vehicle-type-btn {
+      padding: 14px;
+      border: 2px solid #dde4f0;
+      border-radius: var(--radius-sm);
+      background: #fafbff;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      font-family: 'Sarabun', sans-serif;
+    }
+    .vehicle-type-btn:hover { border-color: var(--primary); background: var(--gray-light); }
+    .vehicle-type-btn.selected { border-color: var(--primary); background: var(--gray-light); }
+    .vehicle-type-btn .vt-icon { font-size: 2rem; margin-bottom: 6px; }
+    .vehicle-type-btn .vt-label { font-size: 0.9rem; font-weight: 600; color: #333; }
+    .plate-input-display {
+      background: #fff9e6;
+      border: 2px dashed var(--accent-dark);
+      border-radius: var(--radius-sm);
+      padding: 14px 20px;
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 6px;
+      color: #111;
+      margin-bottom: 6px;
+    }
+    .plate-input-note { font-size: 0.78rem; color: var(--gray); text-align: center; }
+    .submit-btn {
+      width: 100%; padding: 15px;
+      background: var(--accent);
+      color: #111; border: none; border-radius: 10px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1.05rem; font-weight: 800;
+      cursor: pointer; transition: all 0.25s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 8px;
+    }
+    .submit-btn:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: var(--shadow-hover); }
+
+    /* ===== STATUS CHECK ===== */
+    .status-section { background: linear-gradient(135deg, #001f66, #003380); }
+    .status-section .section-header h2 { color: var(--white); }
+    .status-section .section-header p { color: rgba(255,255,255,0.7); }
+    .status-section .section-tag { background: rgba(255,215,0,0.15); color: var(--accent); }
+    .status-box {
+      max-width: 500px; margin: 0 auto;
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 32px;
+    }
+    .status-input-row {
+      display: flex; gap: 10px;
+    }
+    .status-input-row input {
+      flex: 1; padding: 13px 16px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.1);
+      color: var(--white);
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1rem; outline: none;
+      transition: all 0.2s;
+    }
+    .status-input-row input::placeholder { color: rgba(255,255,255,0.5); }
+    .status-input-row input:focus { border-color: var(--accent); background: rgba(255,255,255,0.15); }
+    .status-check-btn {
+      padding: 13px 22px;
+      background: var(--accent); color: #111;
+      border: none; border-radius: var(--radius-sm);
+      font-family: 'Sarabun', sans-serif;
+      font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .status-check-btn:hover { background: var(--accent-dark); }
+    .status-result {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      display: none;
+    }
+    .status-result.show { display: block; }
+    .status-result.success { background: rgba(39,174,96,0.15); border: 1px solid rgba(39,174,96,0.3); }
+    .status-result.pending { background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); }
+    .status-result.not-found { background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.3); }
+    .status-result .status-icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .status-result .status-title { font-size: 1rem; font-weight: 700; color: var(--white); }
+    .status-result .status-desc { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-top: 4px; }
+
+    /* ===== WHY US ===== */
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px; }
+    .why-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s;
+    }
+    .why-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .why-icon {
+      width: 56px; height: 56px;
+      background: var(--gray-light);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; margin-bottom: 16px;
+    }
+    .why-card h4 { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+    .why-card p { font-size: 0.88rem; color: var(--gray); }
+
+    /* ===== PROVINCES STRIP ===== */
+    .provinces-bg { background: #fff; padding: 28px 5%; border-top: 1px solid #eee; }
+    .provinces-title { text-align: center; font-size: 0.88rem; color: var(--gray); font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+    .provinces-strip {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+    }
+    .province-tag {
+      background: var(--gray-light);
+      color: var(--primary); font-size: 0.78rem; font-weight: 600;
+      padding: 5px 12px; border-radius: 20px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .province-tag:hover { background: var(--primary); color: var(--white); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #0d1b3e;
+      color: rgba(255,255,255,0.75);
+      padding: 50px 5% 28px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand .nav-title { color: var(--white); font-size: 1.4rem; margin-bottom: 10px; }
+    .footer-brand p { font-size: 0.88rem; line-height: 1.7; }
+    .footer-col h5 { color: var(--white); font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; }
+    .footer-col a {
+      display: block; text-decoration: none;
+      color: rgba(255,255,255,0.65); font-size: 0.88rem;
+      margin-bottom: 8px; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--accent); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 10px;
+    }
+    .footer-bottom p { font-size: 0.82rem; }
+    .footer-badges { display: flex; gap: 8px; }
+    .footer-badge {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.75rem; padding: 4px 12px;
+      border-radius: 20px; border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .modal-overlay.show { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 36px;
+      max-width: 460px; width: 90%;
+      text-align: center;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+    .modal-overlay.show .modal { transform: scale(1); }
+    .modal-icon { font-size: 3.5rem; margin-bottom: 12px; }
+    .modal h3 { font-size: 1.3rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+    .modal p { font-size: 0.92rem; color: var(--gray); margin-bottom: 24px; }
+    .modal-ref {
+      background: var(--gray-light); border-radius: var(--radius-sm);
+      padding: 14px 20px; margin-bottom: 24px;
+    }
+    .modal-ref .ref-label { font-size: 0.78rem; color: var(--gray); margin-bottom: 4px; }
+    .modal-ref .ref-num { font-size: 1.4rem; font-weight: 800; color: var(--primary); letter-spacing: 2px; }
+    .modal-close-btn {
+      width: 100%; padding: 13px;
+      background: var(--primary); color: var(--white);
+      border: none; border-radius: var(--radius-sm);
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+    }
+    .modal-close-btn:hover { background: var(--primary-dark); }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed; bottom: 28px; right: 28px; z-index: 3000;
+      background: #1a1a2e; color: var(--white);
+      padding: 14px 22px; border-radius: 10px;
+      font-size: 0.92rem; font-weight: 500;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      display: flex; align-items: center; gap: 10px;
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast-icon { font-size: 1.2rem; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .search-row, .search-row.three { grid-template-columns: 1fr; }
+      .hero-stats { gap: 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      nav .nav-links { display: none; }
+      .status-input-row { flex-direction: column; }
+    }
+    @media (max-width: 480px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero { padding: 50px 5% 70px; }
+      .search-box { padding: 22px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+      </svg>
+    </div>
+    <span class="nav-title">Plate<span>Book</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="#how">วิธีใช้งาน</a>
+    <a href="#plates">ป้ายแนะนำ</a>
+    <a href="#booking">จองป้าย</a>
+    <a href="#status">ตรวจสอบสถานะ</a>
+    <a href="#booking" class="nav-btn">เริ่มจองเลย</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-tag">
+    <span>⭐</span> ระบบจองป้ายทะเบียนออนไลน์ อันดับ 1 ในไทย
+  </div>
+  <h1>จองป้ายทะเบียน<br/><span>รถยนต์ & มอเตอร์ไซด์</span><br/>ง่าย เร็ว ปลอดภัย</h1>
+  <p>เลือกป้ายสวย ป้ายมงคล ป้ายเลขเด็ด ได้ทุกจังหวัดทั่วประเทศไทย จบในที่เดียว</p>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">500K+</div>
+      <div class="hero-stat-label">ป้ายทะเบียนในระบบ</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">77</div>
+      <div class="hero-stat-label">จังหวัดทั่วไทย</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">150K+</div>
+      <div class="hero-stat-label">ลูกค้าที่ไว้ใจ</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">24/7</div>
+      <div class="hero-stat-label">บริการตลอดเวลา</div>
+    </div>
+  </div>
+
+  <!-- SEARCH BOX -->
+  <div class="search-box">
+    <h3>🔍 ค้นหาป้ายทะเบียน</h3>
+    <div class="search-row">
+      <div class="field-group">
+        <label>ประเภทรถ</label>
+        <select id="vehicleType" onchange="updatePlatePreview()">
+          <option value="car">🚗 รถยนต์</option>
+          <option value="moto">🏍️ มอเตอร์ไซด์</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>จังหวัด</label>
+        <select id="searchProvince" onchange="updatePlatePreview()">
+          <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+          <option value="เชียงใหม่">เชียงใหม่</option>
+          <option value="ชลบุรี">ชลบุรี</option>
+          <option value="ภูเก็ต">ภูเก็ต</option>
+          <option value="ขอนแก่น">ขอนแก่น</option>
+          <option value="นครราชสีมา">นครราชสีมา</option>
+          <option value="สงขลา">สงขลา</option>
+          <option value="อุดรธานี">อุดรธานี</option>
+          <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
+          <option value="นนทบุรี">นนทบุรี</option>
+          <option value="ปทุมธานี">ปทุมธานี</option>
+          <option value="สมุทรปราการ">สมุทรปราการ</option>
+        </select>
+      </div>
+    </div>
+    <div class="search-row three">
+      <div class="field-group">
+        <label>หมวดอักษร</label>
+        <input type="text" id="searchPrefix" placeholder="เช่น กข, งจ, ชช" maxlength="3" oninput="updatePlatePreview()" />
+      </div>
+      <div class="field-group">
+        <label>ตัวเลข</label>
+        <input type="text" id="searchNum" placeholder="เช่น 8888, 9999" maxlength="4" oninput="updatePlatePreview()" />
+      </div>
+      <div class="field-group">
+        <label>ประเภทป้าย</label>
+        <select>
+          <option>ป้ายทั่วไป</option>
+          <option>ป้ายมงคล</option>
+          <option>ป้ายเลขสวย</option>
+          <option>ป้ายเลขเด็ด</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Plate Preview -->
+    <div class="plate-preview-row" id="platePreviewRow">
+      <div id="mainPlatePreview">
+        <div class="plate-thai-car">
+          <div class="plate-province" id="prevProvince">กรุงเทพมหานคร</div>
+          <div class="plate-number" id="prevNumber">กข · 8888</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="search-btn" onclick="handleSearch()">
+      <span>🔍</span> ค้นหาป้ายที่ต้องการ
+    </button>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section id="how">
+  <div class="section-header">
+    <span class="section-tag">วิธีใช้งาน</span>
+    <h2>จองป้ายทะเบียน ง่ายแค่ 4 ขั้นตอน</h2>
+    <p>ไม่ต้องไปกรมขนส่ง จองได้เองผ่านออนไลน์ 24 ชั่วโมง</p>
+  </div>
+  <div class="steps">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-icon">🔍</div>
+      <h4>ค้นหาป้าย</h4>
+      <p>เลือกจังหวัด ประเภทรถ และระบุเลขหรือหมวดที่ต้องการ</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-icon">📋</div>
+      <h4>กรอกข้อมูล</h4>
+      <p>ระบุชื่อ เบอร์โทร อีเมล และข้อมูลรถที่ต้องการติดป้าย</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-icon">💳</div>
+      <h4>ชำระเงิน</h4>
+      <p>จ่ายผ่าน QR Code, โอนเงิน, บัตรเครดิต หรือ PromptPay</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-icon">✅</div>
+      <h4>รับป้ายทะเบียน</h4>
+      <p>รับสิทธิ์จองและเอกสารยืนยัน พร้อมดำเนินการต่อที่กรมขนส่ง</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURED PLATES ===== -->
+<section id="plates" class="plates-bg">
+  <div class="section-header">
+    <span class="section-tag">ป้ายแนะนำ</span>
+    <h2>ป้ายทะเบียนยอดนิยม 🔥</h2>
+    <p>เลขมงคล เลขสวย คัดมาให้แล้ว ราคาดี พร้อมจอง</p>
+  </div>
+  <div class="plates-grid" id="platesGrid">
+    <!-- Generated by JS -->
+  </div>
+</section>
+
+<!-- ===== BOOKING FORM ===== -->
+<section id="booking" class="booking-section">
+  <div class="section-header">
+    <span class="section-tag">จองป้ายทะเบียน</span>
+    <h2>กรอกข้อมูลเพื่อจองป้าย</h2>
+    <p>กรอกข้อมูลให้ครบถ้วน เราจะดำเนินการให้ทันที</p>
+  </div>
+
+  <div class="booking-container">
+    <div class="booking-header">
+      <h3>📋 ฟอร์มจองป้ายทะเบียน</h3>
+      <p>กรุณากรอกข้อมูลให้ถูกต้องและครบถ้วน</p>
+    </div>
+    <div class="booking-body">
+      <form id="bookingForm" onsubmit="handleBooking(event)">
+
+        <!-- Vehicle Type -->
+        <div class="form-group">
+          <label class="form-label">ประเภทรถ <span>*</span></label>
+          <div class="vehicle-type-grid">
+            <div class="vehicle-type-btn selected" onclick="selectVehicle(this,'car')" data-type="car">
+              <div class="vt-icon">🚗</div>
+              <div class="vt-label">รถยนต์</div>
+            </div>
+            <div class="vehicle-type-btn" onclick="selectVehicle(this,'moto')" data-type="moto">
+              <div class="vt-icon">🏍️</div>
+              <div class="vt-label">มอเตอร์ไซด์</div>
+            </div>
+          </div>
+          <input type="hidden" id="selectedVehicle" value="car" />
+        </div>
+
+        <!-- Plate Number -->
+        <div class="form-group">
+          <label class="form-label">ป้ายทะเบียนที่ต้องการ <span>*</span></label>
+          <div class="form-grid">
+            <div>
+              <label class="form-label" style="font-size:0.78rem;color:#888;">หมวดอักษร</label>
+              <input type="text" class="form-control" id="platePrefix" placeholder="เช่น กข หรือ ชช" maxlength="3" oninput="updateBookingPlate()" />
+            </div>
+            <div>
+              <label class="form-label" style="font-size:0.78rem;color:#888;">ตัวเลข</label>
+              <input type="text" class="form-control" id="plateNumber" placeholder="เช่น 8888" maxlength="4" oninput="updateBookingPlate()" />
+            </div>
+          </div>
+          <div class="plate-input-display" id="bookingPlateDisplay">? · ????</div>
+          <div class="plate-input-note">ตัวอย่างป้ายที่คุณเลือก</div>
+        </div>
+
+        <!-- Province -->
+        <div class="form-group">
+          <label class="form-label">จังหวัด <span>*</span></label>
+          <select class="form-control" id="bookingProvince">
+            <option value="">-- เลือกจังหวัด --</option>
+            <option>กรุงเทพมหานคร</option><option>เชียงใหม่</option><option>เชียงราย</option>
+            <option>ลำปาง</option><option>ลำพูน</option><option>แม่ฮ่องสอน</option>
+            <option>น่าน</option><option>พะเยา</option><option>แพร่</option><option>อุตรดิตถ์</option>
+            <option>ตาก</option><option>สุโขทัย</option><option>พิษณุโลก</option>
+            <option>พิจิตร</option><option>กำแพงเพชร</option><option>เพชรบูรณ์</option>
+            <option>นครสวรรค์</option><option>อุทัยธานี</option><option>ชัยนาท</option>
+            <option>ลพบุรี</option><option>สิงห์บุรี</option><option>อ่างทอง</option>
+            <option>พระนครศรีอยุธยา</option><option>สระบุรี</option><option>นครนายก</option>
+            <option>ปราจีนบุรี</option><option>สระแก้ว</option><option>ฉะเชิงเทรา</option>
+            <option>ชลบุรี</option><option>ระยอง</option><option>จันทบุรี</option><option>ตราด</option>
+            <option>นนทบุรี</option><option>ปทุมธานี</option><option>สมุทรปราการ</option>
+            <option>สมุทรสาคร</option><option>สมุทรสงคราม</option><option>นครปฐม</option>
+            <option>สุพรรณบุรี</option><option>กาญจนบุรี</option><option>ราชบุรี</option>
+            <option>เพชรบุรี</option><option>ประจวบคีรีขันธ์</option>
+            <option>ชุมพร</option><option>สุราษฎร์ธานี</option><option>นครศรีธรรมราช</option>
+            <option>กระบี่</option><option>พังงา</option><option>ภูเก็ต</option>
+            <option>ตรัง</option><option>พัทลุง</option><option>สตูล</option>
+            <option>สงขลา</option><option>ปัตตานี</option><option>ยะลา</option><option>นราธิวาส</option>
+            <option>ขอนแก่น</option><option>อุดรธานี</option><option>หนองบัวลำภู</option>
+            <option>เลย</option><option>หนองคาย</option><option>บึงกาฬ</option>
+            <option>นครพนม</option><option>สกลนคร</option><option>มุกดาหาร</option>
+            <option>กาฬสินธุ์</option><option>มหาสารคาม</option><option>ร้อยเอ็ด</option>
+            <option>ยโสธร</option><option>อำนาจเจริญ</option><option>อุบลราชธานี</option>
+            <option>ศรีสะเกษ</option><option>สุรินทร์</option><option>บุรีรัมย์</option>
+            <option>นครราชสีมา</option><option>ชัยภูมิ</option>
+          </select>
+        </div>
+
+        <!-- Personal Info -->
+        <div class="form-group">
+          <label class="form-label">ชื่อ-นามสกุล <span>*</span></label>
+          <input type="text" class="form-control" id="fullName" placeholder="กรอกชื่อ-นามสกุลของท่าน" required />
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">เบอร์โทรศัพท์ <span>*</span></label>
+            <input type="tel" class="form-control" id="phone" placeholder="08x-xxx-xxxx" maxlength="10" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">อีเมล</label>
+            <input type="email" class="form-control" id="email" placeholder="example@email.com" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">เลขบัตรประชาชน <span>*</span></label>
+          <input type="text" class="form-control" id="idCard" placeholder="x-xxxx-xxxxx-xx-x" maxlength="13" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">หมายเหตุ / ความต้องการเพิ่มเติม</label>
+          <textarea class="form-control" id="note" rows="2" placeholder="เช่น ต้องการเลขสำรอง หรือเงื่อนไขพิเศษ" style="resize:vertical;"></textarea>
+        </div>
+
+        <div style="background:#fff9e6;border:1.5px solid #ffe0a3;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:0.88rem;color:#7a5000;">
+          ⚠️ <strong>หมายเหตุ:</strong> การจองป้ายทะเบียนเป็นการจองสิทธิ์เท่านั้น ต้องนำเอกสารไปดำเนินการต่อที่กรมขนส่งทางบกในจังหวัดที่เลือก ภายใน 30 วันหลังการจอง
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <span>🎉</span> ยืนยันการจองป้ายทะเบียน
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATUS CHECK ===== -->
+<section id="status" class="status-section">
+  <div class="section-header">
+    <span class="section-tag">ตรวจสอบสถานะ</span>
+    <h2>เช็คสถานะการจองของคุณ</h2>
+    <p>ใส่รหัสอ้างอิงที่ได้รับทาง SMS หรืออีเมล</p>
+  </div>
+  <div class="status-box">
+    <div class="status-input-row">
+      <input type="text" id="statusRef" placeholder="รหัสอ้างอิง เช่น PB-20260426-001" />
+      <button class="status-check-btn" onclick="checkStatus()">ตรวจสอบ</button>
+    </div>
+    <div class="status-result" id="statusResult">
+      <div class="status-icon" id="statusIcon"></div>
+      <div class="status-title" id="statusTitle"></div>
+      <div class="status-desc" id="statusDesc"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY US ===== -->
+<section>
+  <div class="section-header">
+    <span class="section-tag">ทำไมต้องเลือกเรา</span>
+    <h2>บริการที่คุณไว้ใจได้</h2>
+    <p>เราใส่ใจทุกรายละเอียดเพื่อประสบการณ์ที่ดีที่สุด</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🔒</div>
+      <h4>ปลอดภัย 100%</h4>
+      <p>ระบบเข้ารหัส SSL ข้อมูลส่วนตัวไม่รั่วไหล ปลอดภัยทุกการทำธุรกรรม</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">⚡</div>
+      <h4>รวดเร็ว ทันใจ</h4>
+      <p>จองเสร็จรับการยืนยันทันที ไม่ต้องรอนาน ไม่ต้องต่อคิว</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🌍</div>
+      <h4>ครบทุกจังหวัด</h4>
+      <p>รองรับ 77 จังหวัดทั่วประเทศ มีป้ายให้เลือกมากกว่า 500,000 รายการ</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💬</div>
+      <h4>ซัพพอร์ต 24/7</h4>
+      <p>ทีมงานพร้อมช่วยเหลือตลอด 24 ชั่วโมง ผ่าน LINE, โทร หรือแชทออนไลน์</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💰</div>
+      <h4>ราคาโปร่งใส</h4>
+      <p>ไม่มีค่าธรรมเนียมซ่อนเร้น ราคาที่เห็นคือราคาจริง</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🔄</div>
+      <h4>คืนเงินได้</h4>
+      <p>หากป้ายที่จองไม่สามารถดำเนินการได้ ยินดีคืนเงินเต็มจำนวน</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROVINCES STRIP ===== -->
+<div class="provinces-bg">
+  <div class="provinces-title">ครอบคลุมทุกจังหวัดทั่วไทย</div>
+  <div class="provinces-strip">
+    <span class="province-tag" onclick="fillProvince('กรุงเทพมหานคร')">กรุงเทพฯ</span>
+    <span class="province-tag" onclick="fillProvince('เชียงใหม่')">เชียงใหม่</span>
+    <span class="province-tag" onclick="fillProvince('ชลบุรี')">ชลบุรี</span>
+    <span class="province-tag" onclick="fillProvince('ภูเก็ต')">ภูเก็ต</span>
+    <span class="province-tag" onclick="fillProvince('ขอนแก่น')">ขอนแก่น</span>
+    <span class="province-tag" onclick="fillProvince('นครราชสีมา')">โคราช</span>
+    <span class="province-tag" onclick="fillProvince('สงขลา')">สงขลา</span>
+    <span class="province-tag" onclick="fillProvince('อุดรธานี')">อุดรธานี</span>
+    <span class="province-tag" onclick="fillProvince('สุราษฎร์ธานี')">สุราษฎร์ธานี</span>
+    <span class="province-tag" onclick="fillProvince('นนทบุรี')">นนทบุรี</span>
+    <span class="province-tag" onclick="fillProvince('ปทุมธานี')">ปทุมธานี</span>
+    <span class="province-tag" onclick="fillProvince('ระยอง')">ระยอง</span>
+    <span class="province-tag" onclick="fillProvince('เชียงราย')">เชียงราย</span>
+    <span class="province-tag" onclick="fillProvince('นครปฐม')">นครปฐม</span>
+    <span class="province-tag" onclick="fillProvince('สมุทรปราการ')">สมุทรปราการ</span>
+    <span class="province-tag" onclick="fillProvince('ลำปาง')">ลำปาง</span>
+    <span class="province-tag" onclick="fillProvince('กาญจนบุรี')">กาญจนบุรี</span>
+    <span class="province-tag" onclick="fillProvince('นครศรีธรรมราช')">นครศรีธรรมราช</span>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-title" style="margin-bottom:10px;">Plate<span style="color:var(--accent);">Book</span></div>
+      <p>ระบบจองป้ายทะเบียนรถออนไลน์ที่ครบ จบ ง่ายที่สุดในประเทศไทย รองรับทั้งรถยนต์และมอเตอร์ไซด์ ครอบคลุมทุก 77 จังหวัด</p>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <div style="background:rgba(255,255,255,0.1);padding:8px 14px;border-radius:8px;font-size:0.82rem;">📞 02-xxx-xxxx</div>
+        <div style="background:rgba(255,255,255,0.1);padding:8px 14px;border-radius:8px;font-size:0.82rem;">💬 LINE: @platebook</div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>บริการ</h5>
+      <a href="#booking">จองป้ายรถยนต์</a>
+      <a href="#booking">จองป้ายมอเตอร์ไซด์</a>
+      <a href="#status">ตรวจสอบสถานะ</a>
+      <a href="#">ป้ายเลขประมูล</a>
+      <a href="#">ป้ายมงคล</a>
+    </div>
+    <div class="footer-col">
+      <h5>ข้อมูล</h5>
+      <a href="#how">วิธีใช้งาน</a>
+      <a href="#">คำถามที่พบบ่อย</a>
+      <a href="#">อัตราค่าธรรมเนียม</a>
+      <a href="#">ข้อกำหนดและเงื่อนไข</a>
+      <a href="#">นโยบายความเป็นส่วนตัว</a>
+    </div>
+    <div class="footer-col">
+      <h5>ติดต่อเรา</h5>
+      <a href="#">Facebook</a>
+      <a href="#">LINE Official</a>
+      <a href="#">Instagram</a>
+      <a href="#">support@platebook.th</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 PlateBook Thailand. All rights reserved.</p>
+    <div class="footer-badges">
+      <span class="footer-badge">SSL Secured</span>
+      <span class="footer-badge">ชำระผ่าน PromptPay</span>
+      <span class="footer-badge">รับรองโดย กรมขนส่งฯ</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <h3>จองป้ายสำเร็จ!</h3>
+    <p>ระบบได้รับการจองของท่านแล้ว เราจะติดต่อกลับเพื่อยืนยันภายใน 24 ชั่วโมง</p>
+    <div class="modal-ref">
+      <div class="ref-label">รหัสอ้างอิงการจอง</div>
+      <div class="ref-num" id="refNumber">PB-20260426-001</div>
+    </div>
+    <p style="font-size:0.82rem;color:#888;margin-bottom:20px;">กรุณาบันทึกรหัสนี้ไว้เพื่อตรวจสอบสถานะการจอง</p>
+    <button class="modal-close-btn" onclick="closeModal()">รับทราบ ขอบคุณ</button>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon">✅</span>
+  <span id="toastMsg">สำเร็จ!</span>
+</div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  // ===== FEATURED PLATES DATA =====
+  const featuredPlates = [
+    { prefix: 'กข', num: '9999', province: 'กรุงเทพฯ', price: '45,000', badge: 'popular', type: 'car' },
+    { prefix: 'ชช', num: '8888', province: 'เชียงใหม่', price: '38,500', badge: 'lucky', type: 'car' },
+    { prefix: 'ทท', num: '5555', province: 'ชลบุรี',   price: '22,000', badge: 'new',     type: 'car' },
+    { prefix: 'งง', num: '1111', province: 'ภูเก็ต',   price: '55,000', badge: 'premium', type: 'car' },
+    { prefix: 'ขข', num: '7777', province: 'ขอนแก่น',  price: '19,900', badge: 'popular', type: 'car' },
+    { prefix: 'งจ', num: '4444', province: 'กรุงเทพฯ', price: '28,000', badge: 'lucky',   type: 'car' },
+    { prefix: 'กก', num: '666',  province: 'ภูเก็ต',   price: '12,500', badge: 'new',     type: 'moto' },
+    { prefix: 'ชก', num: '999',  province: 'เชียงใหม่', price: '8,900',  badge: 'popular', type: 'moto' },
+  ];
+
+  const badgeLabels = {
+    popular: 'ยอดนิยม', lucky: 'เลขมงคล', premium: 'พรีเมียม', new: 'มาใหม่'
+  };
+
+  function renderPlates() {
+    const grid = document.getElementById('platesGrid');
+    grid.innerHTML = featuredPlates.map(p => `
+      <div class="plate-item" onclick="fillBookingForm('${p.prefix}','${p.num}','${p.province}','${p.type}')">
+        <div class="plate-item-inner">
+          <span class="plate-badge badge-${p.badge}">${badgeLabels[p.badge]}</span>
+          <div class="plate-thai-car" style="${p.type==='moto'?'min-width:120px;':''}">
+            <div class="plate-province">${p.province}</div>
+            <div class="plate-number" style="${p.type==='moto'?'font-size:1.2rem;':''}">${p.prefix} · ${p.num}</div>
+          </div>
+          <div class="plate-price">฿${p.price} <span>/ สิทธิ์จอง</span></div>
+          <button class="plate-book-btn">จองป้ายนี้</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  renderPlates();
+
+  // ===== PLATE PREVIEW =====
+  function updatePlatePreview() {
+    const type = document.getElementById('vehicleType').value;
+    const province = document.getElementById('searchProvince').value;
+    const prefix = document.getElementById('searchPrefix').value || 'กข';
+    const num = document.getElementById('searchNum').value || '8888';
+    document.getElementById('prevProvince').textContent = province;
+    document.getElementById('prevNumber').textContent = `${prefix} · ${num}`;
+    const preview = document.getElementById('mainPlatePreview').querySelector('div');
+    if (type === 'moto') {
+      preview.style.minWidth = '130px';
+      preview.querySelector('.plate-number').style.fontSize = '1.3rem';
+      preview.style.setProperty('--plate-color', 'var(--red)');
+    } else {
+      preview.style.minWidth = '180px';
+      preview.querySelector('.plate-number').style.fontSize = '1.6rem';
+    }
+  }
+
+  // ===== BOOKING PLATE DISPLAY =====
+  function updateBookingPlate() {
+    const prefix = document.getElementById('platePrefix').value || '?';
+    const num = document.getElementById('plateNumber').value || '????';
+    document.getElementById('bookingPlateDisplay').textContent = `${prefix} · ${num}`;
+  }
+
+  // ===== SELECT VEHICLE TYPE =====
+  function selectVehicle(btn, type) {
+    document.querySelectorAll('.vehicle-type-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('selectedVehicle').value = type;
+  }
+
+  // ===== FILL BOOKING FROM PLATE CARD =====
+  function fillBookingForm(prefix, num, province, type) {
+    document.getElementById('platePrefix').value = prefix;
+    document.getElementById('plateNumber').value = num;
+    updateBookingPlate();
+    // set province
+    const sel = document.getElementById('bookingProvince');
+    for (let opt of sel.options) {
+      if (opt.value.includes(province) || opt.text.includes(province)) {
+        sel.value = opt.value; break;
+      }
+    }
+    // set vehicle type
+    const btns = document.querySelectorAll('.vehicle-type-btn');
+    btns.forEach(b => {
+      b.classList.remove('selected');
+      if (b.dataset.type === type) b.classList.add('selected');
+    });
+    document.getElementById('selectedVehicle').value = type;
+    // scroll to form
+    document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+    showToast('✅', `เลือกป้าย ${prefix} · ${num} แล้ว! กรอกข้อมูลด้านล่างได้เลย`);
+  }
+
+  // ===== FILL PROVINCE FROM STRIP =====
+  function fillProvince(prov) {
+    document.getElementById('searchProvince').value = prov;
+    updatePlatePreview();
+    showToast('📍', `เลือกจังหวัด ${prov} แล้ว`);
+  }
+
+  // ===== SEARCH =====
+  function handleSearch() {
+    const prov = document.getElementById('searchProvince').value;
+    const prefix = document.getElementById('searchPrefix').value;
+    const num = document.getElementById('searchNum').value;
+    if (!prefix && !num) {
+      showToast('⚠️', 'กรุณาระบุหมวดอักษรหรือตัวเลขที่ต้องการ');
+      return;
+    }
+    showToast('🔍', `กำลังค้นหาป้าย ${prefix||'??'} · ${num||'????'} จังหวัด${prov}...`);
+    setTimeout(() => {
+      document.getElementById('plates').scrollIntoView({ behavior: 'smooth' });
+    }, 800);
+  }
+
+  // ===== BOOKING SUBMIT =====
+  function handleBooking(e) {
+    e.preventDefault();
+    const name = document.getElementById('fullName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const id = document.getElementById('idCard').value.trim();
+    const province = document.getElementById('bookingProvince').value;
+    const prefix = document.getElementById('platePrefix').value.trim();
+    const num = document.getElementById('plateNumber').value.trim();
+
+    if (!name || !phone || !id || !province || !prefix || !num) {
+      showToast('⚠️', 'กรุณากรอกข้อมูลให้ครบถ้วน');
+      return;
+    }
+    if (phone.length < 9) { showToast('⚠️', 'เบอร์โทรศัพท์ไม่ถูกต้อง'); return; }
+    if (id.length < 13) { showToast('⚠️', 'เลขบัตรประชาชนต้องมี 13 หลัก'); return; }
+
+    // Generate ref number
+    const now = new Date();
+    const dateStr = now.getFullYear().toString() +
+      String(now.getMonth()+1).padStart(2,'0') +
+      String(now.getDate()).padStart(2,'0');
+    const refNum = 'PB-' + dateStr + '-' + String(Math.floor(Math.random()*900)+100);
+    document.getElementById('refNumber').textContent = refNum;
+    document.getElementById('successModal').classList.add('show');
+  }
+
+  function closeModal() {
+    document.getElementById('successModal').classList.remove('show');
+    document.getElementById('bookingForm').reset();
+    document.getElementById('bookingPlateDisplay').textContent = '? · ????';
+    document.querySelectorAll('.vehicle-type-btn').forEach((b,i) => {
+      b.classList.toggle('selected', i===0);
+    });
+    document.getElementById('selectedVehicle').value = 'car';
+  }
+
+  // ===== STATUS CHECK =====
+  const demoStatuses = {
+    'PB-20260426-001': { status: 'success', icon: '✅', title: 'การจองสำเร็จ — รอดำเนินการ', desc: 'ป้าย กข · 8888 กรุงเทพมหานคร — กรุณานำเอกสารไปยื่นที่กรมขนส่งภายใน 30 วัน' },
+    'PB-20260425-099': { status: 'pending', icon: '⏳', title: 'รอการยืนยัน', desc: 'เจ้าหน้าที่กำลังตรวจสอบข้อมูล ขอเวลาไม่เกิน 24 ชั่วโมง' },
+  };
+
+  function checkStatus() {
+    const ref = document.getElementById('statusRef').value.trim().toUpperCase();
+    const result = document.getElementById('statusResult');
+    if (!ref) { showToast('⚠️', 'กรุณากรอกรหัสอ้างอิง'); return; }
+
+    const data = demoStatuses[ref];
+    result.className = 'status-result show';
+    if (data) {
+      result.classList.add(data.status);
+      document.getElementById('statusIcon').textContent = data.icon;
+      document.getElementById('statusTitle').textContent = data.title;
+      document.getElementById('statusDesc').textContent = data.desc;
+    } else {
+      result.classList.add('not-found');
+      document.getElementById('statusIcon').textContent = '❌';
+      document.getElementById('statusTitle').textContent = 'ไม่พบรหัสอ้างอิง';
+      document.getElementById('statusDesc').textContent = 'กรุณาตรวจสอบรหัสอีกครั้ง หรือติดต่อเจ้าหน้าที่';
+    }
+  }
+
+  // ===== TOAST =====
+  let toastTimer;
+  function showToast(icon, msg) {
+    clearTimeout(toastTimer);
+    const t = document.getElementById('toast');
+    document.getElementById('toastIcon').textContent = icon;
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  // ===== CLOSE MODAL ON OVERLAY CLICK =====
+  document.getElementById('successModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // ===== ID CARD FORMAT =====
+  document.getElementById('idCard').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g,'').slice(0,13);
+  });
+  document.getElementById('phone').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g,'').slice(0,10);
+  });
+</script>
+</body>
+</html>
