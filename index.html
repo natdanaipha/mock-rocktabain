@@ -3,19 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>จองป้ายทะเบียนรถ | PlateBook Thailand</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>จองป้ายทะเบียนรถ | RockTabian Thailand</title>
+  <!-- Sarabun: plate only | 5 UI fonts for website -->
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Bai+Jamjuree:wght@300;400;500;600;700&family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Mitr:wght@300;400;500;600&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+
+    /* UI Font variable — fixed to Anuphan */
+    :root { --ui-font: 'Anuphan', sans-serif; }
+
     body {
-      font-family: 'Sarabun', sans-serif;
+      font-family: var(--ui-font);
       background: #f4f7fb;
       color: #1a1a2e;
       font-size: 16px;
       line-height: 1.6;
     }
+
+    /* .th-plate always uses Sarabun regardless of UI font */
+    .th-plate, .th-plate * { font-family: 'Sarabun', sans-serif !important; }
 
     /* ===== CSS VARIABLES ===== */
     :root {
@@ -96,13 +104,113 @@
       background: rgba(255,255,255,0.04);
       border-radius: 50%;
     }
+    /* ===== TAGLINE BLINK ===== */
+    /* ง่าย — ขึ้นทันที */
+    @keyframes seq-w1 {
+      0%   { opacity: 0; transform: translateY(8px); }
+      8%   { opacity: 1; transform: translateY(0); }
+      70%  { opacity: 1; transform: translateY(0); }
+      84%  { opacity: 0; transform: translateY(-5px); }
+      100% { opacity: 0; }
+    }
+    /* เร็ว — ขึ้นตาม */
+    @keyframes seq-w2 {
+      0%   { opacity: 0; }
+      12%  { opacity: 0; transform: translateY(8px); }
+      20%  { opacity: 1; transform: translateY(0); }
+      70%  { opacity: 1; transform: translateY(0); }
+      84%  { opacity: 0; transform: translateY(-5px); }
+      100% { opacity: 0; }
+    }
+    /* ปลอดภัย — ขึ้นตามอีกที */
+    @keyframes seq-w3 {
+      0%   { opacity: 0; }
+      24%  { opacity: 0; transform: translateY(8px); }
+      32%  { opacity: 1; transform: translateY(0); }
+      70%  { opacity: 1; transform: translateY(0); }
+      84%  { opacity: 0; transform: translateY(-5px); }
+      100% { opacity: 0; }
+    }
+    .blink-tagline {
+      display: inline-flex; gap: 0.4em;
+      color: #FF6B00;
+    }
+    .blink-tagline .w { display: inline-block; opacity: 0; color: #FF6B00 !important; }
+    .blink-tagline .w1 { animation: seq-w1 5s ease-in-out infinite; }
+    .blink-tagline .w2 { animation: seq-w2 5s ease-in-out infinite; }
+    .blink-tagline .w3 { animation: seq-w3 5s ease-in-out infinite; }
+
+    /* ===== HERO TAG ANIMATIONS ===== */
+    @keyframes hero-tag-glow {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(255,215,0,0.4), 0 0 20px rgba(255,215,0,0.2), 0 0 40px rgba(255,215,0,0.1);
+        border-color: rgba(255,215,0,0.6);
+      }
+      50% {
+        box-shadow: 0 0 18px rgba(255,215,0,0.7), 0 0 36px rgba(255,215,0,0.4), 0 0 60px rgba(255,215,0,0.2);
+        border-color: rgba(255,215,0,1);
+      }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+    @keyframes star-spin {
+      0%   { transform: rotate(0deg) scale(1);   }
+      15%  { transform: rotate(20deg) scale(1.3); }
+      30%  { transform: rotate(-15deg) scale(1.1); }
+      45%  { transform: rotate(10deg) scale(1.25); }
+      60%  { transform: rotate(-5deg) scale(1.1); }
+      100% { transform: rotate(0deg) scale(1);   }
+    }
+    @keyframes tag-float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-4px); }
+    }
+
     .hero-tag {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(255,215,0,0.15);
-      border: 1px solid rgba(255,215,0,0.3);
-      color: var(--accent); font-size: 0.85rem; font-weight: 600;
-      padding: 5px 14px; border-radius: 30px;
-      margin-bottom: 20px;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(
+        90deg,
+        rgba(255,215,0,0.18) 0%,
+        rgba(255,215,0,0.35) 30%,
+        rgba(255,255,200,0.55) 50%,
+        rgba(255,215,0,0.35) 70%,
+        rgba(255,215,0,0.18) 100%
+      );
+      background-size: 200% auto;
+      border: 1.5px solid rgba(255,215,0,0.7);
+      color: #fff; font-size: 1.05rem; font-weight: 700;
+      padding: 9px 22px; border-radius: 50px;
+      margin-bottom: 24px;
+      letter-spacing: 0.3px;
+      text-shadow: 0 1px 8px rgba(255,215,0,0.6);
+      animation:
+        hero-tag-glow 2.2s ease-in-out infinite,
+        shimmer 3s linear infinite,
+        tag-float 3.5s ease-in-out infinite;
+      position: relative;
+      backdrop-filter: blur(4px);
+    }
+    .hero-tag .star-icon {
+      display: inline-block;
+      font-size: 1.2rem;
+      animation: star-spin 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 6px rgba(255,215,0,0.9));
+    }
+    /* badge badge "อันดับ 1" highlight */
+    .hero-tag .badge-no1 {
+      background: var(--accent);
+      color: #111;
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 20px;
+      margin-left: 4px;
+      letter-spacing: 0;
+      text-shadow: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      white-space: nowrap;
     }
     .hero h1 {
       font-size: clamp(2rem, 5vw, 3.2rem);
@@ -199,93 +307,140 @@
       margin-bottom: 6px;
     }
 
-    /* ===== REALISTIC THAI LICENSE PLATE (ตรงตามของจริง) ===== */
+    /* ===================================================
+       THAI LICENSE PLATE  —  เหมือนป้ายจริง 100%
+       โครงสร้าง (บน→ล่าง):
+         [ออก]           ← หมวดอักษร  ตัวใหญ่ bold
+         [กรุงเทพมหานคร] ← จังหวัด     ตัวเล็กมาก
+         [959]           ← เลข         ตัวใหญ่มากที่สุด
+       กรอบ: ขอบดำหนาคู่ชั้น (outer+inner) พื้นขาว
+    =================================================== */
 
-    /*
-      Layout จากบนลงล่าง:
-      1. หมวดอักษร  (ออม / กกก / สวย)  ← ตัวกลาง-ใหญ่
-      2. ชื่อจังหวัด (กรุงเทพมหานคร)    ← ตัวเล็กมาก
-      3. ตัวเลข     (444 / 8888)        ← ตัวใหญ่มาก
-      กรอบดำหนา พื้นขาว-ครีม
-    */
-
+    /* ── Outer plate shell ── */
     .th-plate {
       display: inline-flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: #f9f9f0;            /* สีครีมอ่อนๆ เหมือนป้ายจริง */
-      border: 5px solid #111;
+      background: #fff;
+      border: 4.5px solid #000;
       border-radius: 5px;
-      padding: 7px 14px 8px;
-      box-shadow: 3px 4px 0 #444,     /* เงาด้านล่าง-ขวา ให้รู้สึกมีมิติ */
-                  inset 0 0 0 2px #ddddc8; /* ขอบด้านในสีทอง/เขียว */
+      /* inset shadow = ขอบดำชั้นใน เหมือนป้ายจริง */
+      box-shadow: inset 0 0 0 2.5px #000;
+      padding: 5px 20px 7px;
       font-family: 'Sarabun', sans-serif;
       user-select: none;
       text-align: center;
+      line-height: 1;
       gap: 0;
-      min-width: 130px;
     }
 
-    /* รถยนต์ — กว้างกว่า */
-    .th-plate--car  { min-width: 160px; padding: 7px 18px 8px; }
-    /* มอเตอร์ไซด์ — แคบกว่า */
-    .th-plate--moto { min-width: 120px; padding: 6px 12px 7px; }
+    /* ── รถยนต์ ── */
+    .th-plate--car { min-width: 175px; }
 
-    /* ① หมวดอักษร — บน */
+    /* ── มอเตอร์ไซด์ — สัดส่วนแคบกว่า ── */
+    .th-plate--moto { min-width: 130px; padding: 5px 14px 7px; }
+
+    /* ── ① หมวดอักษร (ออก / สวย / กกก) ── */
     .th-plate__prefix {
-      font-size: 1.45rem;
+      font-size: 2.0rem;
       font-weight: 800;
-      color: #111;
-      letter-spacing: 4px;
+      color: #000;
+      letter-spacing: 5px;
       line-height: 1.15;
+      margin-bottom: 0;
       white-space: nowrap;
     }
     .th-plate--moto .th-plate__prefix {
-      font-size: 1.15rem;
+      font-size: 1.55rem;
       letter-spacing: 3px;
     }
 
-    /* ② จังหวัด — กลาง เล็กมาก */
+    /* ── ② จังหวัด (กรุงเทพมหานคร) — เล็กมาก ── */
     .th-plate__province {
-      font-size: 0.58rem;
-      font-weight: 700;
-      color: #333;
-      letter-spacing: 0.5px;
-      line-height: 1.1;
-      margin: 1px 0 2px;
+      font-size: 0.60rem;
+      font-weight: 600;
+      color: #000;
+      letter-spacing: 0.4px;
+      line-height: 1.2;
+      margin: 0 0 1px 0;
       white-space: nowrap;
     }
-    .th-plate--moto .th-plate__province {
-      font-size: 0.52rem;
-    }
+    .th-plate--moto .th-plate__province { font-size: 0.55rem; }
 
-    /* ③ ตัวเลข — ล่าง ใหญ่สุด */
+    /* ── ③ ตัวเลข (959 / 8888) — ใหญ่ที่สุด ── */
     .th-plate__number {
-      font-size: 2.5rem;
+      font-size: 2.75rem;
       font-weight: 900;
-      color: #111;
-      letter-spacing: 5px;
+      color: #000;
+      letter-spacing: 6px;
       line-height: 1.0;
       white-space: nowrap;
     }
     .th-plate--moto .th-plate__number {
-      font-size: 2.0rem;
+      font-size: 2.2rem;
       letter-spacing: 4px;
     }
 
-    /* size variant เล็กลงสำหรับ search-box preview */
-    .th-plate--sm { min-width: 130px; padding: 5px 12px 6px; }
-    .th-plate--sm .th-plate__prefix { font-size: 1.1rem; letter-spacing: 3px; }
-    .th-plate--sm .th-plate__province { font-size: 0.52rem; }
-    .th-plate--sm .th-plate__number  { font-size: 2.0rem; letter-spacing: 4px; }
+    /* ── SM variant — ใช้ใน hero search-box ── */
+    .th-plate--sm                  { min-width: 145px; padding: 4px 14px 5px; }
+    .th-plate--sm .th-plate__prefix  { font-size: 1.55rem; letter-spacing: 4px; }
+    .th-plate--sm .th-plate__province { font-size: 0.54rem; }
+    .th-plate--sm .th-plate__number  { font-size: 2.2rem;  letter-spacing: 5px; }
 
-    /* ลบ old class ที่ไม่ใช้แล้ว */
-    .plate-thai-car, .plate-thai-moto { display: none; }
+    /* cleanup old unused selectors */
+    .plate-thai-car, .plate-thai-moto,
+    .th-plate__banner, .th-plate__divider { display: none; }
 
     .plate-card-label {
       font-size: 0.78rem; color: var(--gray); font-weight: 500;
     }
+
+    /* ===================================================
+       APPLE-STYLE FONT SWITCHER BAR
+       ปรับ UI font ทั้งเว็บ (ไม่รวมป้ายทะเบียน)
+    =================================================== */
+    .font-bar {
+      position: sticky; top: 68px; z-index: 999;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 0 5%;
+      display: flex; align-items: center; gap: 0;
+      height: 46px;
+    }
+    .font-bar-label {
+      font-size: 0.72rem; font-weight: 600;
+      color: #999; letter-spacing: 0.5px;
+      margin-right: 16px; white-space: nowrap;
+      text-transform: uppercase;
+    }
+    .font-bar-options {
+      display: flex; align-items: center; gap: 4px;
+    }
+    .fbo {
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid transparent;
+      font-size: 0.82rem; font-weight: 600;
+      color: #555; cursor: pointer;
+      transition: all 0.18s; white-space: nowrap;
+      background: transparent;
+      line-height: 1;
+    }
+    .fbo:hover { color: #000; background: rgba(0,0,0,0.05); }
+    .fbo.active {
+      background: #000; color: #fff;
+      border-color: #000;
+    }
+    /* Each fbo renders its own font in its label */
+    .fbo[data-font="thonburi"]{ font-family: 'Thonburi', 'Bai Jamjuree', sans-serif; }
+    .fbo[data-font="bai"]    { font-family: 'Bai Jamjuree', sans-serif; }
+    .fbo[data-font="anuphan"]{ font-family: 'Anuphan', sans-serif; }
+    .fbo[data-font="ibm"]    { font-family: 'IBM Plex Sans Thai', sans-serif; }
+    .fbo[data-font="mitr"]   { font-family: 'Mitr', sans-serif; }
+    .fbo[data-font="noto"]   { font-family: 'Noto Sans Thai', sans-serif; }
 
     /* ===== SECTION ===== */
     section { padding: 70px 5%; }
@@ -304,28 +459,34 @@
     .section-header p { color: var(--gray); font-size: 1rem; max-width: 500px; margin: 0 auto; }
 
     /* ===== HOW IT WORKS ===== */
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; }
+    #how { padding: 48px 5%; }
+    #how .section-header { margin-bottom: 28px; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
     .step-card {
       background: var(--white);
       border-radius: var(--radius);
-      padding: 30px 24px;
+      padding: 20px 14px;
       text-align: center;
       box-shadow: var(--shadow);
       transition: all 0.3s;
       position: relative;
     }
-    .step-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+    .step-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
     .step-num {
-      width: 48px; height: 48px;
+      width: 34px; height: 34px;
       background: var(--primary);
-      color: var(--white); font-size: 1.1rem; font-weight: 800;
+      color: var(--white); font-size: 0.78rem; font-weight: 800;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 16px;
+      margin: 0 auto 10px;
     }
-    .step-icon { font-size: 2.4rem; margin-bottom: 12px; }
-    .step-card h4 { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
-    .step-card p { font-size: 0.88rem; color: var(--gray); }
+    .step-icon { font-size: 1.7rem; margin-bottom: 8px; }
+    .step-card h4 { font-size: 0.78rem; font-weight: 700; color: #1a1a2e; margin-bottom: 5px; }
+    .step-card p { font-size: 0.72rem; color: var(--gray); line-height: 1.4; }
     .step-arrow {
       display: none;
     }
@@ -348,6 +509,8 @@
     }
     .plate-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary); }
     .plate-item-inner { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    /* ป้ายทะเบียนในหมวดป้ายแนะนำ เล็กลง 10% */
+    .plate-item .th-plate { transform: scale(0.9); transform-origin: center; }
     .plate-badge {
       font-size: 0.72rem; font-weight: 700;
       padding: 3px 10px; border-radius: 20px;
@@ -618,19 +781,211 @@
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast-icon { font-size: 1.2rem; }
 
+    /* ===== THEME TOGGLE BUTTON ===== */
+    .theme-toggle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid #dde4f0;
+      background: transparent;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      transition: all 0.25s;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover { background: var(--gray-light); transform: rotate(20deg); }
+
+    /* ===== DARK THEME ===== */
+    [data-theme="dark"] {
+      --gray-light: #1e2236;
+      --white: #1a1d2e;
+      --shadow: 0 4px 24px rgba(0,0,0,0.45);
+      --shadow-hover: 0 8px 36px rgba(0,0,0,0.65);
+    }
+    [data-theme="dark"] body {
+      background: #0f1117;
+      color: #e0e4f0;
+    }
+    [data-theme="dark"] nav {
+      background: #13161f;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+    }
+    [data-theme="dark"] .nav-title { color: #c5d0f0; }
+    [data-theme="dark"] .nav-links a { color: #9099b0; }
+    [data-theme="dark"] .nav-links a:hover { background: #1e2236; color: var(--accent); }
+    [data-theme="dark"] .theme-toggle { border-color: rgba(255,255,255,0.12); color: #e0e4f0; }
+    [data-theme="dark"] .theme-toggle:hover { background: #1e2236; }
+
+    [data-theme="dark"] .font-bar {
+      background: rgba(19,22,31,0.9);
+      border-bottom-color: rgba(255,255,255,0.07);
+    }
+    [data-theme="dark"] .font-bar-label { color: #555; }
+    [data-theme="dark"] .fbo { color: #8892a4; }
+    [data-theme="dark"] .fbo:hover { background: rgba(255,255,255,0.07); color: #e0e4f0; }
+    [data-theme="dark"] .fbo.active { background: #e0e4f0; color: #0f1117; }
+
+    [data-theme="dark"] .search-box { background: #1a1d2e; }
+    [data-theme="dark"] .search-box h3 { color: #c5d0f0; }
+    [data-theme="dark"] .field-group label { color: #6b7690; }
+    [data-theme="dark"] .field-group select,
+    [data-theme="dark"] .field-group input {
+      background: #0f1117; border-color: rgba(255,255,255,0.09);
+      color: #e0e4f0;
+    }
+    [data-theme="dark"] .field-group select:focus,
+    [data-theme="dark"] .field-group input:focus {
+      background: #1a1d2e; border-color: var(--primary);
+    }
+
+    [data-theme="dark"] .section-header h2 { color: #e0e4f0; }
+    [data-theme="dark"] .section-header p { color: #7a8499; }
+    [data-theme="dark"] .section-tag { background: #1e2236; color: #7ab4ff; }
+
+    [data-theme="dark"] .step-card,
+    [data-theme="dark"] .why-card {
+      background: #1a1d2e;
+    }
+    [data-theme="dark"] .step-card h4 { color: #e0e4f0; }
+    [data-theme="dark"] .step-card p  { color: #7a8499; }
+    [data-theme="dark"] .why-card h4  { color: #e0e4f0; }
+    [data-theme="dark"] .why-card p   { color: #7a8499; }
+    [data-theme="dark"] .why-icon { background: #0f1117; }
+
+    [data-theme="dark"] .plates-bg { background: #13161f; }
+    [data-theme="dark"] .plate-item { background: #1a1d2e; border-color: transparent; }
+    [data-theme="dark"] .plate-item:hover { border-color: var(--primary); }
+
+    [data-theme="dark"] .booking-section { background: #13161f; }
+    [data-theme="dark"] .booking-container { background: #1a1d2e; }
+    [data-theme="dark"] .form-label { color: #9099b0; }
+    [data-theme="dark"] .form-control {
+      background: #0f1117; border-color: rgba(255,255,255,0.09); color: #e0e4f0;
+    }
+    [data-theme="dark"] .form-control:focus {
+      background: #1a1d2e; border-color: var(--primary);
+    }
+    [data-theme="dark"] .vehicle-type-btn {
+      background: #0f1117; border-color: rgba(255,255,255,0.09);
+    }
+    [data-theme="dark"] .vehicle-type-btn:hover,
+    [data-theme="dark"] .vehicle-type-btn.selected {
+      background: #1e2236; border-color: var(--primary);
+    }
+    [data-theme="dark"] .vehicle-type-btn .vt-label { color: #c5d0f0; }
+    [data-theme="dark"] .plate-input-display {
+      background: #1a1205; border-color: var(--accent-dark); color: #ffe;
+    }
+
+    [data-theme="dark"] .provinces-bg {
+      background: #13161f; border-top-color: rgba(255,255,255,0.07);
+    }
+    [data-theme="dark"] .provinces-title { color: #555; }
+    [data-theme="dark"] .province-tag { background: #1e2236; color: #7ab4ff; }
+    [data-theme="dark"] .province-tag:hover { background: var(--primary); color: #fff; }
+
+    [data-theme="dark"] .modal { background: #1a1d2e; }
+    [data-theme="dark"] .modal h3 { color: #e0e4f0; }
+    [data-theme="dark"] .modal p  { color: #7a8499; }
+    [data-theme="dark"] .modal-ref { background: #0f1117; }
+
+    [data-theme="dark"] ::-webkit-scrollbar-track { background: #13161f; }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-      .search-row, .search-row.three { grid-template-columns: 1fr; }
-      .hero-stats { gap: 20px; }
+      /* Navbar: hide links, keep theme btn visible */
+      nav { padding: 0 4%; height: 58px; }
+      nav .nav-links a:not(.nav-btn) { display: none; }
+      nav .nav-links { gap: 4px; }
+      nav .nav-btn { display: none; }
+      .theme-toggle { margin-left: 0; }
+
+      /* Font bar: scroll horizontal */
+      .font-bar { padding: 0 4%; overflow-x: auto; scrollbar-width: none; height: 40px; top: 58px; }
+      .font-bar::-webkit-scrollbar { display: none; }
+      .font-bar-label { display: none; }
+      .font-bar-options { flex-shrink: 0; }
+      .fbo { font-size: 0.76rem; padding: 4px 11px; }
+
+      /* Hero */
+      .hero { padding: 32px 4% 44px; }
+      .hero-tag { font-size: 0.75rem; padding: 4px 10px; margin-bottom: 14px; }
+
+      /* Sections */
+      section { padding: 44px 4%; }
+      .section-header { margin-bottom: 32px; }
+
+      /* Search box */
+      .search-box { padding: 20px 16px; border-radius: 14px; }
+      .search-box h3 { font-size: 0.95rem; margin-bottom: 14px; }
+      .search-row, .search-row.three { grid-template-columns: 1fr; gap: 10px; }
+
+      /* Plate preview row */
+      .plate-preview-row { gap: 14px; }
+
+      /* Steps */
+      #how { padding: 36px 4%; }
+      .steps { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .step-card { padding: 14px 10px; }
+      .step-num { width: 28px; height: 28px; font-size: 0.7rem; margin-bottom: 7px; }
+      .step-icon { font-size: 1.4rem; margin-bottom: 5px; }
+      .step-card h4 { font-size: 0.72rem; }
+      .step-card p  { font-size: 0.66rem; }
+
+      /* Featured plates */
+      .plates-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .plate-item  { padding: 14px 10px; }
+
+      /* Booking form */
       .form-grid { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-      nav .nav-links { display: none; }
+      .booking-body { padding: 22px 18px; }
+      .booking-header { padding: 20px 22px; }
+      .booking-header h3 { font-size: 1.15rem; }
+
+      /* Status */
       .status-input-row { flex-direction: column; }
+      .status-box { padding: 22px 18px; }
+
+      /* Why cards */
+      .why-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+      .why-card  { padding: 20px 16px; }
+
+      /* Provinces */
+      .provinces-bg { padding: 20px 4%; }
+
+      /* Footer */
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+      footer { padding: 36px 4% 20px; }
     }
+
     @media (max-width: 480px) {
+      /* Hero */
+      .hero { padding: 24px 4% 36px; }
+
+      /* Sections */
+      section { padding: 36px 4%; }
+
+      /* Steps → 2 col on small */
+      .steps { grid-template-columns: 1fr 1fr; }
+
+      /* Plates → 1 col */
+      .plates-grid { grid-template-columns: 1fr; }
+
+      /* Why → 1 col */
+      .why-grid { grid-template-columns: 1fr; }
+
+      /* Footer → 1 col */
       .footer-grid { grid-template-columns: 1fr; }
-      .hero { padding: 50px 5% 70px; }
-      .search-box { padding: 22px 20px; }
+
+      /* Search box */
+      .search-box { padding: 16px 14px; margin: 0 -2%; }
+
+      /* Modal */
+      .modal { padding: 24px 18px; }
+
+      /* Toast */
+      .toast { bottom: 16px; right: 16px; left: 16px; font-size: 0.85rem; }
     }
   </style>
 </head>
@@ -644,7 +999,7 @@
         <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
       </svg>
     </div>
-    <span class="nav-title">Plate<span>Book</span></span>
+    <span class="nav-title">Rock<span>Tabian</span></span>
   </a>
   <div class="nav-links">
     <a href="#how">วิธีใช้งาน</a>
@@ -653,34 +1008,20 @@
     <a href="#status">ตรวจสอบสถานะ</a>
     <a href="#booking" class="nav-btn">เริ่มจองเลย</a>
   </div>
+  <!-- Theme toggle: outside nav-links เพื่อให้แสดงบน mobile ด้วย -->
+  <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="เปลี่ยน Theme">🌙</button>
 </nav>
+
 
 <!-- ===== HERO ===== -->
 <section class="hero">
   <div class="hero-tag">
-    <span>⭐</span> ระบบจองป้ายทะเบียนออนไลน์ อันดับ 1 ในไทย
+    <span class="star-icon">⭐</span>
+    ระบบจองป้ายทะเบียนออนไลน์
+    <span class="badge-no1">อันดับ 1 ในไทย</span>
   </div>
-  <h1>จองป้ายทะเบียน<br/><span>รถยนต์ & มอเตอร์ไซด์</span><br/>ง่าย เร็ว ปลอดภัย</h1>
-  <p>เลือกป้ายสวย ป้ายมงคล ป้ายเลขเด็ด ได้ทุกจังหวัดทั่วประเทศไทย จบในที่เดียว</p>
-
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="hero-stat-num">500K+</div>
-      <div class="hero-stat-label">ป้ายทะเบียนในระบบ</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">77</div>
-      <div class="hero-stat-label">จังหวัดทั่วไทย</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">150K+</div>
-      <div class="hero-stat-label">ลูกค้าที่ไว้ใจ</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">24/7</div>
-      <div class="hero-stat-label">บริการตลอดเวลา</div>
-    </div>
-  </div>
+  <h1 style="font-size: clamp(1.8rem, 4.5vw, 2.88rem);">จองป้ายทะเบียน<br/><span>รถยนต์ & มอเตอร์ไซด์</span><br/><span class="blink-tagline"><span class="w w1">ง่าย</span><span class="w w2">เร็ว</span><span class="w w3">ปลอดภัย</span></span></h1>
+  <p style="font-size: 1.09rem; font-weight: 700;">เลือกป้ายสวย ป้ายมงคล ป้ายเลขเด็ด ได้ทุกจังหวัดทั่วประเทศไทย จบในที่เดียว</p>
 
   <!-- SEARCH BOX -->
   <div class="search-box">
@@ -711,7 +1052,7 @@
         </select>
       </div>
     </div>
-    <div class="search-row three">
+    <div class="search-row">
       <div class="field-group">
         <label>หมวดอักษร</label>
         <input type="text" id="searchPrefix" placeholder="เช่น กข, งจ, ชช" maxlength="3" oninput="updatePlatePreview()" />
@@ -719,26 +1060,6 @@
       <div class="field-group">
         <label>ตัวเลข</label>
         <input type="text" id="searchNum" placeholder="เช่น 8888, 9999" maxlength="4" oninput="updatePlatePreview()" />
-      </div>
-      <div class="field-group">
-        <label>ประเภทป้าย</label>
-        <select>
-          <option>ป้ายทั่วไป</option>
-          <option>ป้ายมงคล</option>
-          <option>ป้ายเลขสวย</option>
-          <option>ป้ายเลขเด็ด</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Plate Preview -->
-    <div class="plate-preview-row" id="platePreviewRow">
-      <div id="mainPlatePreview">
-        <div class="th-plate th-plate--car th-plate--sm" id="previewPlate">
-          <div class="th-plate__prefix" id="prevPrefix">กข</div>
-          <div class="th-plate__province" id="prevProvince">กรุงเทพมหานคร</div>
-          <div class="th-plate__number" id="prevNumber">8888</div>
-        </div>
       </div>
     </div>
 
@@ -748,7 +1069,19 @@
   </div>
 </section>
 
-<!-- ===== HOW IT WORKS ===== -->
+<!-- ===== FEATURED PLATES (ขึ้นมาก่อน) ===== -->
+<section id="plates" class="plates-bg">
+  <div class="section-header">
+    <span class="section-tag">ป้ายแนะนำ</span>
+    <h2>ป้ายทะเบียนยอดนิยม 🔥</h2>
+    <p>เลขมงคล เลขสวย คัดมาให้แล้ว ราคาดี พร้อมจอง</p>
+  </div>
+  <div class="plates-grid" id="platesGrid">
+    <!-- Generated by JS -->
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS (ย้ายลงมา) ===== -->
 <section id="how">
   <div class="section-header">
     <span class="section-tag">วิธีใช้งาน</span>
@@ -780,18 +1113,6 @@
       <h4>รับป้ายทะเบียน</h4>
       <p>รับสิทธิ์จองและเอกสารยืนยัน พร้อมดำเนินการต่อที่กรมขนส่ง</p>
     </div>
-  </div>
-</section>
-
-<!-- ===== FEATURED PLATES ===== -->
-<section id="plates" class="plates-bg">
-  <div class="section-header">
-    <span class="section-tag">ป้ายแนะนำ</span>
-    <h2>ป้ายทะเบียนยอดนิยม 🔥</h2>
-    <p>เลขมงคล เลขสวย คัดมาให้แล้ว ราคาดี พร้อมจอง</p>
-  </div>
-  <div class="plates-grid" id="platesGrid">
-    <!-- Generated by JS -->
   </div>
 </section>
 
@@ -929,7 +1250,7 @@
   </div>
   <div class="status-box">
     <div class="status-input-row">
-      <input type="text" id="statusRef" placeholder="รหัสอ้างอิง เช่น PB-20260426-001" />
+      <input type="text" id="statusRef" placeholder="รหัสอ้างอิง เช่น RT-20260426-001" />
       <button class="status-check-btn" onclick="checkStatus()">ตรวจสอบ</button>
     </div>
     <div class="status-result" id="statusResult">
@@ -1010,11 +1331,11 @@
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <div class="nav-title" style="margin-bottom:10px;">Plate<span style="color:var(--accent);">Book</span></div>
+      <div class="nav-title" style="margin-bottom:10px;">Rock<span style="color:var(--accent);">Tabian</span></div>
       <p>ระบบจองป้ายทะเบียนรถออนไลน์ที่ครบ จบ ง่ายที่สุดในประเทศไทย รองรับทั้งรถยนต์และมอเตอร์ไซด์ ครอบคลุมทุก 77 จังหวัด</p>
       <div style="margin-top:16px;display:flex;gap:10px;">
-        <div style="background:rgba(255,255,255,0.1);padding:8px 14px;border-radius:8px;font-size:0.82rem;">📞 02-xxx-xxxx</div>
-        <div style="background:rgba(255,255,255,0.1);padding:8px 14px;border-radius:8px;font-size:0.82rem;">💬 LINE: @platebook</div>
+        <div style="background:rgba(255,255,255,0.1);padding:8px 14px;border-radius:8px;font-size:0.82rem;">📞 087-454-5555</div>
+        <div style="background:rgba(255,255,255,0.1);padding:8px 14px;border-radius:8px;font-size:0.82rem;">💬 LINE: @rocktabian</div>
       </div>
     </div>
     <div class="footer-col">
@@ -1036,13 +1357,13 @@
     <div class="footer-col">
       <h5>ติดต่อเรา</h5>
       <a href="#">Facebook</a>
-      <a href="#">LINE Official</a>
+      <a href="#">LINE Official: @rocktabian</a>
       <a href="#">Instagram</a>
-      <a href="#">support@platebook.th</a>
+      <a href="#">support@rocktabian.th</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 PlateBook Thailand. All rights reserved.</p>
+    <p>© 2026 RockTabian Thailand. All rights reserved.</p>
     <div class="footer-badges">
       <span class="footer-badge">SSL Secured</span>
       <span class="footer-badge">ชำระผ่าน PromptPay</span>
@@ -1059,7 +1380,7 @@
     <p>ระบบได้รับการจองของท่านแล้ว เราจะติดต่อกลับเพื่อยืนยันภายใน 24 ชั่วโมง</p>
     <div class="modal-ref">
       <div class="ref-label">รหัสอ้างอิงการจอง</div>
-      <div class="ref-num" id="refNumber">PB-20260426-001</div>
+      <div class="ref-num" id="refNumber">RT-20260426-001</div>
     </div>
     <p style="font-size:0.82rem;color:#888;margin-bottom:20px;">กรุณาบันทึกรหัสนี้ไว้เพื่อตรวจสอบสถานะการจอง</p>
     <button class="modal-close-btn" onclick="closeModal()">รับทราบ ขอบคุณ</button>
@@ -1074,6 +1395,31 @@
 
 <!-- ===== JAVASCRIPT ===== -->
 <script>
+  // ===== UI FONT SWITCHER (Apple-style) =====
+  const uiFontMap = {
+    thonburi:"'Thonburi', 'Bai Jamjuree', sans-serif",
+    bai:     "'Bai Jamjuree', sans-serif",
+    anuphan: "'Anuphan', sans-serif",
+    ibm:     "'IBM Plex Sans Thai', sans-serif",
+    mitr:    "'Mitr', sans-serif",
+    noto:    "'Noto Sans Thai', sans-serif",
+  };
+  const uiFontLabel = {
+    thonburi:'Thonburi — Apple System Font สะอาด อ่านง่าย',
+    bai:     'Bai Jamjuree — เรียบสะอาด คล้าย Apple SF Pro',
+    anuphan: 'Anuphan — โมเดิร์นมาก อ่านง่าย',
+    ibm:     'IBM Plex Sans Thai — พรีเมียม เป็นทางการ',
+    mitr:    'Mitr — โค้งมน เป็นมิตร',
+    noto:    'Noto Sans Thai — กลาง ชัดเจน',
+  };
+
+  function setUIFont(key, btn) {
+    document.querySelectorAll('.fbo').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.documentElement.style.setProperty('--ui-font', uiFontMap[key]);
+    showToast('✏️', uiFontLabel[key]);
+  }
+
   // ===== FEATURED PLATES DATA =====
   const featuredPlates = [
     { prefix: 'กข', num: '9999', province: 'กรุงเทพฯ', price: '45,000', badge: 'popular', type: 'car' },
@@ -1128,7 +1474,7 @@
     document.getElementById('prevProvince').textContent = province;
     document.getElementById('prevNumber').textContent   = num;
 
-    // Swap plate type class (no color change — both white now)
+    // Swap plate type class
     const plate = document.getElementById('previewPlate');
     plate.classList.toggle('th-plate--moto', type === 'moto');
     plate.classList.toggle('th-plate--car',  type !== 'moto');
@@ -1227,7 +1573,7 @@
     const dateStr = now.getFullYear().toString() +
       String(now.getMonth()+1).padStart(2,'0') +
       String(now.getDate()).padStart(2,'0');
-    const refNum = 'PB-' + dateStr + '-' + String(Math.floor(Math.random()*900)+100);
+    const refNum = 'RT-' + dateStr + '-' + String(Math.floor(Math.random()*900)+100);
     document.getElementById('refNumber').textContent = refNum;
     document.getElementById('successModal').classList.add('show');
   }
@@ -1244,8 +1590,8 @@
 
   // ===== STATUS CHECK =====
   const demoStatuses = {
-    'PB-20260426-001': { status: 'success', icon: '✅', title: 'การจองสำเร็จ — รอดำเนินการ', desc: 'ป้าย กข · 8888 กรุงเทพมหานคร — กรุณานำเอกสารไปยื่นที่กรมขนส่งภายใน 30 วัน' },
-    'PB-20260425-099': { status: 'pending', icon: '⏳', title: 'รอการยืนยัน', desc: 'เจ้าหน้าที่กำลังตรวจสอบข้อมูล ขอเวลาไม่เกิน 24 ชั่วโมง' },
+    'RT-20260426-001': { status: 'success', icon: '✅', title: 'การจองสำเร็จ — รอดำเนินการ', desc: 'ป้าย กข · 8888 กรุงเทพมหานคร — กรุณานำเอกสารไปยื่นที่กรมขนส่งภายใน 30 วัน' },
+    'RT-20260425-099': { status: 'pending', icon: '⏳', title: 'รอการยืนยัน', desc: 'เจ้าหน้าที่กำลังตรวจสอบข้อมูล ขอเวลาไม่เกิน 24 ชั่วโมง' },
   };
 
   function checkStatus() {
@@ -1278,6 +1624,27 @@
     t.classList.add('show');
     toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
   }
+
+  // ===== DARK / LIGHT THEME TOGGLE =====
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', next);
+    showToast(next === 'dark' ? '🌙' : '☀️', next === 'dark' ? 'Dark Mode เปิดแล้ว' : 'Light Mode เปิดแล้ว');
+  }
+
+  // Apply saved theme immediately on load
+  (function applySavedTheme() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      const btn = document.getElementById('themeBtn');
+      if (btn) btn.textContent = '☀️';
+    }
+  })();
 
   // ===== CLOSE MODAL ON OVERLAY CLICK =====
   document.getElementById('successModal').addEventListener('click', function(e) {
